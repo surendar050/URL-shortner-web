@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TinyURL Shortener</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      margin-bottom: 15px;
+      transition: border 0.2s;
+    }
+
+    input:focus {
+      border-color: #007bff;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      background: #f1f1f1;
+      border-radius: 6px;
+      font-size: 15px;
+      word-break: break-all;
+    }
+
+    .result a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .result a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>URL Shortener</h2>
+    <input type="text" id="urlInput" placeholder="Enter your long URL">
+    <button onclick="shortenUrl()">Shorten</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    async function shortenUrl() {
+      const longUrl = document.getElementById("urlInput").value;
+      const resultDiv = document.getElementById("result");
+
+      if (!longUrl) {
+        alert("Please enter a URL!");
+        return;
+      }
+
+      try {
+        resultDiv.innerHTML = "⏳ Shortening...";
+        const response = await fetch(
+          "https://tinyurl.com/api-create.php?url=" + encodeURIComponent(longUrl)
+        );
+        const shortUrl = await response.text();
+
+        resultDiv.innerHTML =
+          `✅ Short URL: <a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
+      } catch (err) {
+        console.error("Error:", err);
+        resultDiv.innerHTML = "❌ Failed to shorten URL. Try again.";
+      }
+    }
+  </script>
+</body>
+</html>
